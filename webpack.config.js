@@ -1,8 +1,8 @@
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 
-// TODO: rename this as a webpack.dev.js and create a production webpack.config.js
+// TODO: rename this as a webpack.dev.js and create a production webpack.config.json
 module.exports = {
-  entry: './src/index.html',
+  entry: './src/main.ts',
   devtool: 'inline-source-map',
   module: {
     rules: [
