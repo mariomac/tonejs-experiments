@@ -10,7 +10,7 @@ function build() {
 
 const dev = {
   build() {
-    sh("webpack --mode development --watch", {async: true});
+    //sh("webpack --mode development --watch", {async: true});
   },
   server() {
     dev.build();
