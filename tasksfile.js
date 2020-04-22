@@ -13,7 +13,6 @@ const dev = {
     sh("webpack --mode development --watch", {async: true});
   },
   server() {
-    dev.build();
     sh("webpack-dev-server --mode development --watch");
   },
 }
