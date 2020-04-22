@@ -22,7 +22,7 @@ async function play() {
 //start the part at the beginning of the Transport's timeline
     parts.forEach(it => {it.start()})
 
-    Tone.Transport.bpm.value = 130
+    Tone.Transport.bpm.value = 180
     Tone.Transport.start()
 }
 
