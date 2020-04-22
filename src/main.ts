@@ -33,16 +33,23 @@ document.documentElement.addEventListener('mousedown',  () => {
     let parts = new Array<Tone.Part>()
     let chn = 0
     for(let channel of Object.values(Song.Song)) {
+        let theCh = chn
 //pass in an array of events
+        //Song.Song[Song.Song.length] = undefined //insert end of song mark
         let nn = 0
         parts.push( new Tone.Part(function (time, event) {
-            if (chn == 0 && nn == 0) {
+            if (theCh == 0 && nn == 0) {
                 recorder.start()
             }
-            //the events will be given to the callback with the time they occur
-            synth.triggerAttackRelease(event.note, event.duration, time)
-            nn++
-            if (chn == 0 && nn >= channel.length) {
+            if (event != undefined) {
+                //the events will be given to the callback with the time they occur
+                synth.triggerAttackRelease(event.note, event.duration, time)
+            }
+            if (theCh == 0) {
+                nn++
+            }
+            if (theCh == 0 && nn >= channel.length) {
+
                 setTimeout(() => recorder.stop(), 1000)
             }
         }, channel))
@@ -50,12 +57,8 @@ document.documentElement.addEventListener('mousedown',  () => {
     }
 
 //start the part at the beginning of the Transport's timeline
+    Tone.Transport.bpm.value = 180
     parts.forEach(it => {it.start()})
-
-    Tone.Transport.bpm.value = 180
-
-//start the part at the beginning of the Transport's timeline
-    Tone.Transport.bpm.value = 180
     Tone.Transport.start()
 })
 
