@@ -14,7 +14,7 @@ document.documentElement.addEventListener('mousedown',  () => {
     // @ts-ignore
     const recorder = new MediaRecorder(dest.stream);
 
-    var synth = new Tone.Synth()
+    var synth = new Tone.PolySynth()
         .connect(dest)
         .toDestination()
 
@@ -30,29 +30,32 @@ document.documentElement.addEventListener('mousedown',  () => {
         audio.src = URL.createObjectURL(blob);
     };
 
-
-    //Song.Song[Song.Song.length] = undefined //insert end of song mark
-
-    let note = 0
+    let parts = new Array<Tone.Part>()
+    let chn = 0
+    for(let channel of Object.values(Song.Song)) {
 //pass in an array of events
-    var part = new Tone.Part(function (time, event) {
-        if (note == 0) {
-            recorder.start()
-        }
-        if (event != undefined) {
+        let nn = 0
+        parts.push( new Tone.Part(function (time, event) {
+            if (chn == 0 && nn == 0) {
+                recorder.start()
+            }
             //the events will be given to the callback with the time they occur
             synth.triggerAttackRelease(event.note, event.duration, time)
-        }
-        note++
-        if (note >= Song.Song.length){
-            setTimeout(() => recorder.stop(), 1000)
-        }
-    }, Song.Song)
-
+            nn++
+            if (chn == 0 && nn >= channel.length) {
+                setTimeout(() => recorder.stop(), 1000)
+            }
+        }, channel))
+        chn++
+    }
 
 //start the part at the beginning of the Transport's timeline
-    Tone.Transport.bpm.value = 130
-    part.start(0)
+    parts.forEach(it => {it.start()})
+
+    Tone.Transport.bpm.value = 180
+
+//start the part at the beginning of the Transport's timeline
+    Tone.Transport.bpm.value = 180
     Tone.Transport.start()
 })
 
